@@ -1,7 +1,19 @@
+//SET-UP
+//make sure correct port is selected (the one arduino is connected to)
+//select correct arduino: Tools-> Board -> (select the arduino board being used)
+
+////////////////////////////////////////////////////
+//      LCD Display
+////////////////////////////////////////////////////
+
 #include <LiquidCrystal.h> //LCD 20x4 display
 
 LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
 
+
+////////////////////////////////////////////////////
+//      KEYPAD  
+////////////////////////////////////////////////////
 
 #include <Keypad.h> 
 
@@ -20,21 +32,36 @@ Keypad keypad = Keypad( makeKeymap(keys), rowPins, colPins, ROWS, COLS);
 
 char key;
 
+////////////////////////////////////////////////////
+//      Pulse / Frequency Measurement
+////////////////////////////////////////////////////
+
+int sensorValue;
+
+
 void setup() {
   lcd.begin(20,4);
+
+  sensorValue = analogRead(A5);
 }
 
 void loop() {
   key = keypad.getKey();
-  lcd.setCursor(0, 0);
+
+  sensorValue = analogRead(A5);
 
   //print the number of seconds since reset
+  lcd.setCursor(0, 0);
   lcd.print("Seconds: ");
   lcd.print(millis() / 1000);
 
-  //print the current key pressed
+  //print the frequency / analog signal
+  //
+  lcd.setCursor(0, 1);
+  lcd.print("Sensor value: ");
+  lcd.print(sensorValue);
 
-  
+  //print the current key pressed
   if(key){
     lcd.setCursor(0, 2);
     lcd.print("key: ");
@@ -43,3 +70,8 @@ void loop() {
     //lcd.clear();
 
 }
+
+
+
+//Embedded Systems Spring 2020 TAMK
+//"Software Americans" group: Eric, Oscar, & Jaakko
