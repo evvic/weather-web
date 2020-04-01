@@ -33,7 +33,7 @@ Keypad keypad = Keypad( makeKeymap(keys), rowPins, colPins, ROWS, COLS);
 char key;
 
 ////////////////////////////////////////////////////
-//      Pulse / Frequency Measurement
+//      Frequency Measurement
 ////////////////////////////////////////////////////
 
 int sensorValue;
@@ -56,7 +56,7 @@ void loop() {
   lcd.print(millis() / 1000);
 
   //print the frequency / analog signal
-  //
+  //the read value might need to be adjustted to be more accurate
   lcd.setCursor(0, 1);
   lcd.print("Sensor value: ");
   lcd.print(sensorValue);
