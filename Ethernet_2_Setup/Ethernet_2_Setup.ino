@@ -38,10 +38,10 @@ void fetch_IP(void);
                            //      Not relevat with Ethershield  
 
 //Our modified mac addy                           
-//static uint8_t mymac[6] =  { 0x44,0x76,0x58,0x10,0x00,0x73 }; //this works!
+static uint8_t mymac[6] =  { 0x44,0x76,0x58,0x10,0x00,0x73 }; //this works!
 
 //mac address on forum
-static uint8_t mymac[6] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED }; //basic MAC address random
+//static uint8_t mymac[6] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED }; //basic MAC address random
 
 //Original ref code mac address:
 //static uint8_t mymac[6] = { 0x44,0x76,0x58,0x10,0x00,mac_6 };
