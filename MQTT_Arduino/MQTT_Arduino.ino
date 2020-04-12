@@ -105,11 +105,12 @@ void setup() {
 
 void loop()     //  main code here 
 {
-int inx=69;
+int inx;
   
 while(true) 
   {  
-
+    inx = random(0, 18); //random windspeed from 0 - 18 km / h
+    
     lcd.setCursor(0,3);                                 // set curosor to left upper corner
     
     //         01234567890123456789
@@ -206,7 +207,9 @@ void send_MQTT_message(int num)                     // Send MQTT message
 
     char bufa[50];
 
-    sprintf(bufa,"American_MQTT: wind_speed =%d KPH", num);               // create message with header and data
+    sprintf(bufa,"IOTJS={\"S_name\":\"wind_speed\",\"S_value\":%d}", num);  // create message with header and data
+    //IOTJS = {"S_name":"wind_speed","S_value":3.13}
+    //S_name = signal name, S_value = signal value
 
     Serial.println( bufa );                              //  Print message to serial monitor
 
@@ -214,7 +217,7 @@ void send_MQTT_message(int num)                     // Send MQTT message
    if (client.connected()) 
      
   { 
-        Serial.print("client.connected()");
+        Serial.print("\nclient.connected()");
         client.publish(outTopic,bufa);                        // send message to MQTT server        
   }
   else
