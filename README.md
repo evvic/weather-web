@@ -10,7 +10,7 @@ Weather data collection and transmission through a wired Arduino
 
 To **subscribe to ALL MQTT messages** being received: `mosquitto_sub -t "#"` <br>
 The hash #, gives all messages being received (at least in it''s scope) <br>
-mqtt_arduinno1.cpp added backend URL http://bowd9-api.course.tamk.cloud/v1/weather to send_to_Tamk_REST_API_0() so weather data started to get parsed and sent into JSON formatted messages to my DB. <br>
+mqtt_arduinno1.cpp added backend URL http://bowd9-api.course.tamk.cloud/v1/weather to `send_to_Tamk_REST_API_0()` so weather data started to get parsed and sent into JSON formatted messages to my DB. <br>
 
 Used WinSCP (like PuTTY) to login into VM and edit mqtt_arduinno1.cpp, then saved changes. <br>
 Logged into VM through PuTTY and navigated to iotti/Embsys/ and in console used `make` command to **compile saved changes**. <br>
