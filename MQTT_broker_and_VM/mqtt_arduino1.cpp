@@ -247,8 +247,8 @@ void mqtt::ICT_rest (void)
 
 		///////////////////////////////////////   SEND TO DB ////////////////////////////////////////////		
 
-		send_to_Tamk_REST_API_0("http://webapi19sa-1.course.tamk.cloud/v1/weather",jsondat);	// call url creation function	
-
+		send_to_Tamk_REST_API_0("http://bowd9-api.course.tamk.cloud/v1/weather",jsondat);	// Software Americans db
+		
 
 		
 

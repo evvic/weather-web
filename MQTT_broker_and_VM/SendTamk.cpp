@@ -44,7 +44,8 @@ void send_to_Tamk_REST_API_0(string cl_st, string json_dat)			// create URL with
 
 	std::string json_db = "{ }";
 
-  	json_db="{\"device_id\":\"ICT_2018\",\"data\":"+ json_dat + "}";
+  	json_db="{\"device_id\":\"ICT_2020\",\"data\":"+ json_dat + "}";
+    //Originally said "ICT_2018", changed to 2020 cause kari said we think
 
 
 ///////////////////////////Rest Api  URL created //////////////////////
