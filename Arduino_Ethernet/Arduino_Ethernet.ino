@@ -1,58 +1,70 @@
 
 //
-//    Alyk  jatko course 2020       24.3.2020 KN
+//    Alyk  jatko course 2020       30.3.2020 KN
 //    Voltage and freq mode 
-//    Ethernet (1) module with W5100   / RED module
+//    Ethernet (2) module with W55100   / BLUE module
 
-
-//MUST CONNECT THROUGH LAN PORT
-//NOT WA
-
-//REMOVED POTENTIOMETER
 
 
 #include <LiquidCrystal.h>                            // include LCD library
 
-#include <Ethernet2.h>             // include Ethernet libarty W5500 library
-//Ethernet2.h is for our BLUE module with the W5500 chip
+#include <Ethernet2.h>                              // include Ethernet libarty W5500 library
+//#include <Ethernet.h>                                 // incluide Ethernet library W5100
 
-//#include <Ethernet.h>    // incluide Ethernet library W5100
+#include <PubSubClient.h>                             // include MQTT library      
+#include <TimerOne.h>                                 // include timer library
 
-//timer may not be needded till MQTT client is added
-#include <TimerOne.h>      // include timer library
+
 
 
 //                   RS  E   D4  D5  D6  D7
-     LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
-            // LCD pin wiring settings for MEGA
+     LiquidCrystal lcd(12, 11, 5, 4, 3, 2);            // LCD pin wiring settings for MEGA
+//   LiquidCrystal lcd(8,  7,  6,  5,  4,  3);            // LCD pin wiring settings fro NANO
 
                                                       
-EthernetClient ethClient;             // Ethernet object var  
+EthernetClient ethClient;                               // Ethernet object var  
 
-void fetch_IP(void);
  
 /////////////////////////////////////////////////////////////////////////////////////////////  
-///           MAC nro                                                                      //
-/// 
-#define  mac_6    0x73 //73    ///     Last mac number  MSB mac numbers at ethernet_mega.c    ///
-                           //      Not relevat with Ethershield  
+///                               MAC nro                                                  //
+///     
+                    //      Not relevat with Ethershield  
+static uint8_t mymac[6] = { 0x44,0x76,0x58,0x10,0x00,0x73 };
+                                                                                          ///
 
-//Our modified mac addy                           
-static uint8_t mymac[6] =  { 0x44,0x76,0x58,0x10,0x00,0x73 }; //this works!
+/////////////////////////////////////////////////////////////////////////////////////////////
+//
+//  MQTT settings
+//
+////////////////////////////////////////////////////////////////////////////////////////////
+ 
+ unsigned int Port = 10884;                          //  MQTT port number
 
-//mac address on forum
-//static uint8_t mymac[6] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED }; //basic MAC address random
-
-//Original ref code mac address:
-//static uint8_t mymac[6] = { 0x44,0x76,0x58,0x10,0x00,mac_6 };
-                                                                                       ///
+ byte server[] = { 193,167,167,59 };                 // TAMK IP
 
  
-                           
+ char* deviceId     = "Merica";           // * set device id (will be the MQTT client username) 
+ char* clientId     = "Uhhmerica";        // * set a random string (max 23 chars, will be the MQTT client id) 
+ char* deviceSecret = "tamk1";            // * set device secret (will be the MQTT client password) 
+
+                                                      // MQTT Server settings  
+
+  
+void callback(char* topic, byte* payload, unsigned int length); // subscription callback for received MQTTT messages   
+
+PubSubClient client(server, Port, callback, ethClient);   // mqtt client 
+
+
+//////////////// MQTT topic names  ///////////////////////////
+
+ #define inTopic    "ICT1_in_2020"                    // * MQTT channel where data are received 
+ #define outTopic   "ICT4_out_2020"                   // * MQTT channel where data is send 
+ 
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 ///                               SETUP section
-/// 
+///
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -60,20 +72,22 @@ void setup() {
   // put your setup code here, to run once:
 
     Serial.begin(9600);                                 // Serial monitor baudrate  = 9600
-
-  
+ 
     lcd.begin(20,4);                                    // Display size defination 20 char  4 row
    
     lcd.setCursor(0,0);                                 // set curosor to left upper corner
     //         01234567890123456789
-    lcd.print("24.3.2020 Alyk jatk ");                  // print to lCD 
+    lcd.print("18.4.2020 Alyk jatk ");                  // print to lCD 
 
-    Serial.println("Start 24.3.2020");                   // print to serial monitor
+    Serial.println("Start 18.4.2020");                   // print to serial monitor
 
- 
+    delay(500);
+
     
       fetch_IP();                                         // initialize Ethernet connection
                                                           // get IP number from DHCP
+    
+      Connect_MQTT_server();                              // connect to MQTT server    
   
 }
 
@@ -83,20 +97,36 @@ void setup() {
 ///
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-void loop() 
-{ }
+void loop()     //  main code here 
+{
+int inx;
   
+while(true) 
+  {  
+    //TESTING RANDOM WIND SPEEDS ARE SENT
+    inx = random(0, 18); //random windspeed from 0 - 18 km / h
+    
+    lcd.setCursor(0,3);                                 // set curosor to left upper corner
+    
+    //         01234567890123456789
+    lcd.print("                    ");
+    
+    lcd.print("Send message:  ");                       // print to lCD 
+    lcd.print(inx);                                      // print value of inx to LCD 
+
+    send_MQTT_message(inx);
+    
+    inx++;
+
+    delay(1500);
+  }
+}
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 ///
 ///    LOOP END
 ///
 /////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-
-
 
 
 //////////////////////////////////////////////////
@@ -115,35 +145,26 @@ void loop()
 //////////////////////////////////////////
 
 
-
 void fetch_IP(void)
 {
-byte rev=1;
+  byte rev=1;
 
-
-
-  lcd.setCursor(0,1);
+  lcd.setCursor(0,0);
 
   //         01234567890123456789  
   lcd.print("     Waiting IP     ");
 
   rev=Ethernet.begin( mymac);                  // get IP number
-
-
-  //checking rev boolean status
-  Serial.print("\nrev: ");
-  Serial.print(rev);
      
-  Serial.print( F("\nW5100 Revision ") );
+  Serial.print( F("\nW5500 Revision ") );
     
-  if ( rev == 0)
-  {
+  if ( rev == 0){
                    
-     Serial.println( F( "Failed to access Ethernet controller" ) );
+                      Serial.println( F( "Failed to access Ethernet controller" ) );
                    
-                                 // 0123456789012345689 
-     lcd.setCursor(0,0); lcd.print(" Ethernet failed   ");
-  }    
+                                                // 0123456789012345689 
+                    lcd.setCursor(0,0); lcd.print(" Ethernet failed   ");
+                 }    
                  
               
      Serial.println( F( "Setting up DHCP" ));
@@ -151,14 +172,134 @@ byte rev=1;
      Serial.println(Ethernet.localIP()); 
 
 
-  lcd.setCursor(0,1);
+  lcd.setCursor(0,0);
   //         012345678901234567890
   lcd.print("                     ");
   
-  lcd.setCursor(0,1);
+  lcd.setCursor(0,0);
   lcd.print("myIP=");
   lcd.print(Ethernet.localIP());
   delay(1500);
+}
 
+/////////////////////////////////////////////////////////////////////////////////
+//////////////// MQTT Routines
+///////////////////////////////////////////////////////////////////////////////
+
+                                                             
+void send_MQTT_message(int num)                     // Send MQTT message
+{
+
+    char bufa[50];
+
+    sprintf(bufa,"IOTJS={\"S_name\":\"wind_speed\",\"S_value\":%d}", num);  // create message with header and data
+    //IOTJS = {"S_name":"wind_speed","S_value":3.13}
+    //S_name = signal name, S_value = signal value
+
+    Serial.println( bufa );                              //  Print message to serial monitor
+
+     
+   if (client.connected()) 
+     
+  { 
+        //Serial.print("\nclient.connected()"); //checkpoint
+        client.publish(outTopic,bufa);                        // send message to MQTT server        
+  }
+  else
+  {                                                           //   Re connect if connection is lost
+    delay(500);
+
+           lcd.setCursor(0,1);
+                  //  012345678901234567890
+           lcd.print("   RE Connecting    ");                // Re Connection 
+         
+              Serial.println(" RE Connecting" );
+
+      client.connect(clientId, deviceId, deviceSecret);
+        
+      delay(1000);                                            // wait for reconnecting
+  }
   
 }
+
+
+
+
+                                                   
+ 
+ void Connect_MQTT_server()                         //  MQTT server connection  
+ { 
+                                     
+            Serial.println(" Connecting to MQTT" );
+
+            Serial.print(server[0]); Serial.print(".");     // Print MQTT server IP number to Serial monitor
+            Serial.print(server[1]); Serial.print(".");
+            Serial.print(server[2]); Serial.print(".");
+            Serial.println(server[3]); 
+         
+
+            lcd.setCursor(0,1);
+            //         012345678901234567890
+            lcd.print("                     ");
+            
+            lcd.setCursor(0,1);
+            lcd.print("MQTT=");
+            lcd.print(server[0]);lcd.print(".");              // Print MQTT server IP number to LCD
+            lcd.print(server[1]);lcd.print(".");
+            lcd.print(server[2]);lcd.print(".");
+            lcd.print(server[3]);
+            
+            delay(500);
+
+
+   if (!client.connected())                                   // check if allready connected  
+     { 
+                                                              // connection to MQTT server 
+      if (client.connect(clientId, deviceId, deviceSecret)) 
+        { 
+           lcd.setCursor(0,1);
+           lcd.print("Conn");   // Connection is OK
+         
+            Serial.println(" Connected OK " );
+                                           
+            client.subscribe(inTopic); // subscript to in topic        
+        } 
+     else
+        {
+           lcd.setCursor(0,1);
+           //         01234567890123456789
+           lcd.print("  MQTT Error        ");   // error in connection
+
+           Serial.println(" MQTT Connection ERROR " );
+     
+        }    
+    } 
+    
+ }
+
+
+
+                               // Receive incoming MQTT message   
+ 
+ void callback(char* topic, byte* payload, unsigned int length) 
+ { 
+                                 // copu the payload content into a char* 
+   char* receiv_string; 
+   receiv_string = (char*) malloc(length + 1); 
+   memcpy(receiv_string, payload, length); // copy received message to receiv_string 
+   receiv_string[length] = '\0';           
+    
+       lcd.setCursor(0,0);
+       //         01234567890123456789
+       lcd.print("Mess=               ");
+       
+       lcd.setCursor(5,0);
+       lcd.print(receiv_string); // print reveived message to LCD
+
+       Serial.println( receiv_string );
+       
+   free(receiv_string); 
+ } 
+
+ //Software Americans
+ //Eric, Oscar, Jaakko
