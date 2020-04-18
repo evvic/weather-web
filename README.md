@@ -1,10 +1,12 @@
 # weather-app
 Weather data collection and transmission through a wired Arduino
 
-## Embedded Systems VM: <br>
-
 ###### LOG & NOTES FOR WEATHER-APP DEVELOPMENT... <br>
-<br>
+
+
+## Raspberry Pi VM / MQTT Broker: <br>
+
+#### The Raspberry Pi is the VM, running the C++ gateway code as the MQTT broker. The broker accepts the MQTT message sent from the Arduino and parses the data in JSON format and then sends it to my database.
 
 To **subscribe to ALL MQTT messages** being received: `mosquitto_sub -t "#"` <br>
 The hash #, gives all messages being received (at least in it''s scope) <br>
