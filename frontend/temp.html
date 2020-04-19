@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" 
+            href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" 
+            integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+            crossorigin="anonymous">
+        <link rel="icon"
+            type="image/png"
+            href="weather_icon.png">
+        <title>Weather app - Weather type</title>
+            
+    </head>
+    <body>
+        <!--NAVBAR BEGIN-->
+        <div id="navbar-element"></div>
+        <!--NAVBAR ENDS-->
+
+        <span>Weather app - Weather type</span>
+        <br> <br>
+
+
+        <!--Center drop-down selection-->
+        <center>
+            <label for="datatype">Choose Data Type</label>
+
+            <select id="datatype" onchange="getAmount()">
+                <option value="temperature">Temperature</option>
+                <option value="wind_speed">Wind Speed</option>
+                <option value="wind_direction">Wind Direction</option>
+                <option value="light">Light</option>
+                <option value="rain">Rain</option>
+                <option value="humidity_in">Humidity In</option> <!--humidity_in-->
+                <option value="humidity_out">Humidity Out</option>
+            </select>
+        </center>
+        <br>
+
+        <center>
+            <label for="interval">Time Interval</label>
+
+            <select id="interval" onchange="getAmount()">
+                <option value="24">Last 24 hours</option> <!--24 hours-->
+                <option value="48">Last 2 days</option> <!--48 hours-->
+                <option value="168">Last week</option> <!--168 hours-->
+                <option value="336">Last 2 weeks</option> <!--336 hours-->
+                <option value="720">Last month</option> <!--720 hours-->
+                <option value="4320">Last 6 months</option> <!--4320 hours-->
+            </select>
+        </center>
+        <br>
+
+        <!--button maybe not necessary-->
+        <!--<button id="update" type="button">Update</button>-->
+
+        <div class="container">
+            <canvas id="mychart"></canvas>
+        </div>
+        <br>
+
+        <div class="container">
+            <table data-auto-refresh-silent="true" class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Data Type</th>
+                        <th>Time</th>
+                        <th>Data</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+        
+        
+        <!-- Load JavaScript files here, just above closing body tag -->
+        <script src="extensions/auto-refresh/bootstrap-table-auto-refresh.js"></script> <!--auto refresh boot strap table?-->
+        <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@1.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script> <!--deleting table rows-->
+        <script src="eric.brown/Chart.js"></script> <!--Chart.js minimal-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script> <!--Chart.js minimal-->
+        <script src="common.js"></script>
+        <script src="temp.js"></script>
+    </body>
+</html>

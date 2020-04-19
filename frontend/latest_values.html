@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" 
+            href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" 
+            integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+            crossorigin="anonymous">
+        <link rel="icon"
+            type="image/png"
+            href="weather_icon.png">
+        <title>Weather app - Latest Values</title>
+            
+    </head>
+    <body>
+        <!--NAVBAR BEGIN-->
+        <div id="navbar-element"></div>
+        <!--NAVBAR ENDS-->
+
+        <span>Weather app - Latest Values</span>
+        <br> <br>
+
+
+        <!--Center drop-down selection-->
+        <center>
+            <label for="last">Choose how many latest</label>
+
+            <select id="last" onchange="getAmount()">
+            <option value="1">Latest</option>
+            <option value="20">Last 20</option>
+            <option value="50">Last 50</option>
+            <option value="500">Last 500</option>
+            </select>
+        </center>
+        <br>
+
+        <!--button maybe not necessary-->
+        <!--<button id="update" type="button">Update</button>-->
+
+        <div class="container">
+            <table data-auto-refresh-silent="true" class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>ID</th>
+                        <th>Device ID</th>
+                        <th>Time</th>
+                        <th>Data</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        
+        <!-- Load JavaScript files here, just above closing body tag -->
+        <script src="extensions/auto-refresh/bootstrap-table-auto-refresh.js"></script> <!--auto refresh boot strap table?-->
+        <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@1.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script> <!--deleting table rows-->
+        <script src="common.js"></script>
+        <script src="latest_values.js"></script>
+    </body>
+</html>
