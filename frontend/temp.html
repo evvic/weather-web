@@ -24,7 +24,7 @@
         <center>
             <label for="datatype">Choose Data Type</label>
 
-            <select id="datatype" onchange="getAmount()">
+            <select id="datatype" onchange="getDataModern()">
                 <option value="temperature">Temperature</option>
                 <option value="wind_speed">Wind Speed</option>
                 <option value="wind_direction">Wind Direction</option>
@@ -39,7 +39,7 @@
         <center>
             <label for="interval">Time Interval</label>
 
-            <select id="interval" onchange="getAmount()">
+            <select id="interval" onchange="getDataModern()">
                 <option value="24">Last 24 hours</option> <!--24 hours-->
                 <option value="48">Last 2 days</option> <!--48 hours-->
                 <option value="168">Last week</option> <!--168 hours-->
@@ -74,10 +74,8 @@
         
         
         <!-- Load JavaScript files here, just above closing body tag -->
-        <script src="extensions/auto-refresh/bootstrap-table-auto-refresh.js"></script> <!--auto refresh boot strap table?-->
-        <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@1.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@1.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script> <!--bootstrap?-->
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script> <!--deleting table rows-->
-        <script src="eric.brown/Chart.js"></script> <!--Chart.js minimal-->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script> <!--Chart.js minimal-->
         <script src="common.js"></script>
         <script src="temp.js"></script>

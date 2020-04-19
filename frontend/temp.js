@@ -1,24 +1,11 @@
 console.log("Loading temp.js...");
 
+// initiazlization
+const getDataModern = async () => {
+    console.log("In getDataModern()");
 
-/*
-let myChart = document.getElementById('myChart').getContext('2d');
-
-let massPopChart = new myChart(myChart, {
-    type: 'bar', // bar, horizontalBar, pie, line, doughnut, radar, polarArea
-    data: {
-        labels:[''],
-        datasets:[],
-
-    },
-    options:{}
-})
-*/
-
-function getAmount() { 
-
-    //remove old data from table    
-    //$("tbody").children().remove();
+    resetData(); //clears data and labels from chart
+    updateWeatherChart();
 
     //get weather datatype
     const datatype = document.getElementById("datatype").value;
@@ -30,109 +17,119 @@ function getAmount() {
     const tableBody = document.getElementsByTagName("tbody")[0];
     // Define an asynchronous function using arrow syntax
 
-    const getDataModern = async () => {
-        // Todo: fetch data
+    //remove old data from table    
+    $("tbody").children().remove();
 
-        //remove old data from table    
-        $("tbody").children().remove();
+    console.log("going to fetch json data");
+    //fetch data using modern Fetch api
+    const data = await fetch(`http://webapi19sa-1.course.tamk.cloud/v1/weather/${datatype}/${interval}`);
+    //keyword 'await' can only be used inside async function
 
-        //fetch data using modern Fetch api
-        const data = await fetch(`http://webapi19sa-1.course.tamk.cloud/v1/weather/${datatype}/${interval}`);
-        //keyword 'await' can only be used inside async function
+    //get actual JSON data 
+    const dataJson = await data.json();
+    //.json() is an async funciton
 
-        //get actual JSON data 
-        const dataJson = await data.json();
-        //.json() is an async funciton
+    console.log("dataJson", dataJson);
 
-        console.log("dataJson", dataJson);
+    //last count
+    var index = 0; //counts time & data separately
+    var i = 0;     //counts time & data together (half as fast)
 
-        //last count
-        var i = 0;
+    //variables that are passed into addData()
+    var dataVal; 
+    var timeVal;
 
-        //'for of' loop for iterating dataJson
-        for (rowData of dataJson) {
-            //Insert new row to table
-            const newRow = tableBody.insertRow(-1);
-            //default is -1
-            //(-1) is so each next row of data won't be added OVER another row, with -1 it will be put at the end of the table
+    console.log("Entering 1st for loop getDataModern()");
+    //'for of' loop for iterating dataJson
+    for (rowData of dataJson) {
+        //Insert new row to table
+        const newRow = tableBody.insertRow(-1); // default is -1
+        //(-1) is so each next row of data won't be added OVER another row, with -1 it will be put at the end of the table
 
-            const cellKeys = Object.keys(rowData); //Output: ["id", "device_id", "date_time", "data"]
+        const cellKeys = Object.keys(rowData); //Output: ["id", "device_id", "date_time", "data"]
 
-
-
+        // making data type name in table
             const dataname = datatypeToOfficial(datatype); //change to more formal style
             const newCell = newRow.insertCell(-1);
             newCell.textContent = dataname;
+        //////////////////////////////////
 
-            for(cellKey of cellKeys) {
-                
-                const newCell = newRow.insertCell(-1); //(-1) want to insert at the end of the row
-
-                switch(cellKey) {
-                    //If data cell, dig key&value from sub object
-                    case "data":
-                        const key = Object.keys(rowData[cellKey])[0];
-                        const value = rowData[cellKey][key];
-                        newCell.textContent = `${key}: ${value}`;
-                        break;
-                    //for other cells, copy the value to the cell
-                    default:
-                        newCell.textContent = rowData[cellKey];
-                }
-            }
+        for(cellKey of cellKeys) {
             
+            //let dataArr = []; //array for grabbing data tp put in graph
+            const newCell = newRow.insertCell(-1); //(-1) want to insert at the end of the row
 
+            switch(cellKey) {
+                //If data cell, dig key&value from sub object
+                case "data":
+                    const key = Object.keys(rowData[cellKey])[0];
+
+                    console.log("case: data");
+                    //array for graph
+
+                    const value = rowData[cellKey][key];
+                    newCell.textContent = `${key}: ${value}`;
+
+                    break;
+                //for other cells, copy the value to the cell
+                default:
+                    console.log("case: default");
+                    newCell.textContent = rowData[cellKey];
+
+                        //array for graph
+                        //index odd gives data values
+                    if(index % 2 == 1) {
+                        //from there
+                        dataVal = rowData[cellKey];
+                        //addData('weatherChart', index, rowData[cellKey]);
+                        //console.log(dataArr + " at " + index); //being wierd but working
+                    }
+                    //index even gives date values
+                    else {
+                        timeVal = rowData[cellKey];
+                    // console.log(timeArr + " at " + index); //being wierd but working
+                    }
+            }              
+            index++;
         }
-    };
+        console.log("addData(" + i + ", " + timeVal + ", " + dataVal + ")");
+        addData(i, timeVal, dataVal);
+        i++;
+    }
+};
 
-    getDataModern();
+getDataModern();
 
-    getChart();
-} 
+//Chart.js original chart
+/*
 
-getAmount();
+function getChart(datatype, interval) {
 
+    console.log("In getChart()");
 
-function getChart() {
-
-    //get weather datatype
-    const datatype = document.getElementById("datatype").value;
     const dataname = datatypeToOfficial(datatype); //change to more formal style
 
-    //get time interval (in hours)
-    const interval = document.getElementById("interval").value;
-
     let myChart = document.getElementById('mychart').getContext('2d');
-
     
     // Global Options
     Chart.defaults.global.defaultFontFamily = 'Lato';
     Chart.defaults.global.defaultFontSize = 18;
     Chart.defaults.global.defaultFontColor = '#777';
-    
 
-    let massPopChart = new Chart(myChart, {
-        type:'bar', // bar, horizontalBar, pie, line, doughnut, radar, polarArea
+    let dataArr = [5, 10, 8, 12, 6, 7, 15, 20, 13];
+    let timeArr = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+    let weatherChart = new Chart(myChart, {
+        type:'line', // bar, horizontalBar, pie, line, doughnut, radar, polarArea
         data:{
-            labels:['temperature', 'humidity', 'wind_speed'],
+            labels : timeArr,
             datasets:[{
-                label:'weather_types',
-                data:[
-                    69,
-                    420,
-                    360
-                ],
-                // backgroundColor:'green' //cahnegs all bar colors
-                
-                backgroundColor:[
-                    'rgba(255, 99, 132, 0.6)',
-                    'rgba(255, 192, 192, 0.6)',
-                    'rgba(255, 102, 255, 0.6)',
-                ], //change each specific bar color as array
-                hoverBorderWidth:1,
-                hoverBorderColor:'#777',
-
-                
+                lineTension: 0.3,
+                label:`${dataname} values`,
+                data : dataArr,
+                backgroundColor:datatypeToColor(datatype), //cahnegs all bar colors
+                hoverBorderWidth:10,
+                hoverBorderColor:datatypeToColor(datatype),
             }]
 
         },
@@ -164,9 +161,11 @@ function getChart() {
     })
 }
 
+*/
 
 
-// Function for button when clicked
-const clickmeButton = document.getElementById("update");
-clickmeButton.addEventListener('click', getAmount);
-
+/*
+    // Function for button when clicked
+    const clickmeButton = document.getElementById("update");
+    clickmeButton.addEventListener('click', getAmount);
+*/
