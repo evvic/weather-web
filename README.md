@@ -1,5 +1,6 @@
 # weather-app
-Weather data collection and transmission through a wired Arduino
+Weather data collection and transmission through a wired Arduino <br>
+Frontend viewable at [weather-app website](http://bowd9.course.tamk.cloud/)
 
 ###### LOG & NOTES FOR WEATHER-APP DEVELOPMENT... <br>
 
