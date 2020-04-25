@@ -1,30 +1,36 @@
 <!DOCTYPE html>
+
 <html>
     <head>
+        <title>Weather app</title>
         <link rel="stylesheet" 
-            href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" 
-            integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
-            crossorigin="anonymous">
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" 
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+        crossorigin="anonymous">
         <link rel="icon"
-            type="image/png"
-            href="weather_icon.png">
-        <title>Weather app - Weather type</title>
-            
+          type="image/png"
+          href="weather_icon.png">
     </head>
     <body>
         <!--NAVBAR BEGIN-->
         <div id="navbar-element"></div>
         <!--NAVBAR ENDS-->
 
-        <span>Weather app - Weather type</span>
-        <br> <br>
-
-
         <!--Center drop-down selection-->
         <center>
+            <label for="last">Choose how many latest</label>
+
+            <select id="last" onchange="getAmount()">
+            <option value="1">Latest</option>
+            <option value="20">Last 20</option>
+            <option value="50">Last 50</option>
+            <option value="500">Last 500</option>
+            </select>
+            
             <label for="datatype">Choose Data Type</label>
 
-            <select id="datatype" onchange="getDataModern()">
+            <select id="datatype" style="margin:10px;" onchange="getAmount()">
+                <!--<option value="all">All</option>-->
                 <option value="temperature">Temperature</option>
                 <option value="wind_speed">Wind Speed</option>
                 <option value="wind_direction">Wind Direction</option>
@@ -36,48 +42,13 @@
         </center>
         <br>
 
-        <center>
-            <label for="interval">Time Interval</label>
+        <!--FOOTER BEGIN-->
+        <div id="footer-element"></div>
+        <!--FOOTER ENDS-->
 
-            <select id="interval" onchange="getDataModern()">
-                <option value="24">Last 24 hours</option> <!--24 hours-->
-                <option value="48">Last 2 days</option> <!--48 hours-->
-                <option value="168">Last week</option> <!--168 hours-->
-                <option value="336">Last 2 weeks</option> <!--336 hours-->
-                <option value="720">Last month</option> <!--720 hours-->
-                <option value="4320">Last 6 months</option> <!--4320 hours-->
-            </select>
-        </center>
-        <br>
-
-        <!--button maybe not necessary-->
-        <!--<button id="update" type="button">Update</button>-->
-
-        <div class="container">
-            <canvas id="mychart"></canvas>
-        </div>
-        <br>
-
-        <div class="container">
-            <table data-auto-refresh-silent="true" class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Data Type</th>
-                        <th>Time</th>
-                        <th>Data</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-        </div>
-
-        
-        
         <!-- Load JavaScript files here, just above closing body tag -->
-        <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@1.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script> <!--bootstrap?-->
-		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script> <!--deleting table rows-->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script> <!--Chart.js minimal-->
         <script src="common.js"></script>
         <script src="temp.js"></script>
+        
     </body>
 </html>

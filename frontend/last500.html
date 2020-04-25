@@ -8,7 +8,7 @@
         <link rel="icon"
             type="image/png"
             href="weather_icon.png">
-        <title>Weather app - Latest Values</title>
+        <title>Weather app - Last 500 Values</title>
             
     </head>
     <body>
@@ -16,46 +16,30 @@
         <div id="navbar-element"></div>
         <!--NAVBAR ENDS-->
 
-        <span>Weather app - Latest Values</span>
-        <br> <br>
-
-
-        <!--Center drop-down selection-->
+        <span>Weather app - Last 500 Values</span>
+        <br>
+        
         <center>
             <label for="last">Choose how many latest</label>
 
-            <select id="last" onchange="getAmount()">
+                <select id="last" onchange="getAmount()">
+                <option value="500">Last 500</option>
+                <option value="100">Last 100</option>
+                <option value="50">Last 50</option>
                 <option value="20">Last 20</option>
-                <option value="10">Last 10</option>
-                <option value="1">Latest</option>
-            </select>
-            
-            <label for="datatype">Choose Data Type</label>
-
-            <select id="datatype" style="margin:10px;" onchange="getAmount()">
-                <option value="temperature">Temperature</option>
-                <option value="wind_speed">Wind Speed</option>
-                <option value="wind_direction">Wind Direction</option>
-                <option value="light">Light</option>
-                <option value="rain">Rain</option>
-                <option value="humidity_in">Humidity In</option> <!--humidity_in-->
-                <option value="humidity_out">Humidity Out</option>
-            </select>
+            </select>  
         </center>
-        <br>
-
-        <!--button maybe not necessary-->
-        <!--<button id="update" type="button">Update</button>-->
+        
 
         <div class="container">
             <table data-auto-refresh-silent="true" class="table table-striped">
                 <thead>
                     <tr>
                         <th>#</th>
+                        <th>ID</th>
                         <th>Device ID</th>
                         <th>Time</th>
                         <th>Data</th>
-                        <th>Unit</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -69,6 +53,6 @@
         <!-- Load JavaScript files here, just above closing body tag -->
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script> <!--deleting table rows. Tested & NEEDED-->
         <script src="common.js"></script>
-        <script src="latest_values.js"></script>
+        <script src="last500.js"></script>
     </body>
 </html>

@@ -1,4 +1,4 @@
-console.log("Loading latest_values.js...");
+console.log("Loading last500.js...");
 
 function getAmount() { 
     //remove old data from table    
@@ -9,8 +9,6 @@ function getAmount() {
     const tableBody = document.getElementsByTagName("tbody")[0];
     // Define an asynchronous function using arrow syntax
 
-    //get weather datatype
-    const datatype = document.getElementById("datatype").value;
 
     const getDataModern = async () => {
         // Todo: fetch data
@@ -19,13 +17,7 @@ function getAmount() {
         $("tbody").children().remove();
 
         //fetch data using modern Fetch api
-        /*if(datatype == "all") {
-            const data = await fetch("http://webapi19sa-1.course.tamk.cloud/v1/weather");
-            console.log("in if");
-        } */
-
-        const data = await fetch(`http://webapi19sa-1.course.tamk.cloud/v1/weather/${datatype}`);
-        console.log("in else");
+        const data = await fetch("http://webapi19sa-1.course.tamk.cloud/v1/weather");
         
         //keyword 'await' can only be used inside async function
 
@@ -45,18 +37,16 @@ function getAmount() {
             //default is -1
             //(-1) is so each next row of data won't be added OVER another row, with -1 it will be put at the end of the table
 
-            const cellKeys = Object.keys(rowData); //Output: ["#", "device_id", "date_time", "data", "unit"]
+            const cellKeys = Object.keys(rowData); //Output: ["id", "device_id", "date_time", "data"]
 
-            //incrementing #
-            i++;
+            //last 50 incrementing and display
+            i = i + 1;
             
             const newCell = newRow.insertCell(-1);
             newCell.textContent = i;
 
-            var j = 0; //~~~~~~~~~~~~~~~
             var stuff;
             for(cellKey of cellKeys) {
-                
                 
                 const newCell = newRow.insertCell(-1); //(-1) want to insert at the end of the row
 
@@ -66,18 +56,15 @@ function getAmount() {
                         const key = Object.keys(rowData[cellKey])[0];
                         const value = rowData[cellKey][key];
                         newCell.textContent = `${key}: ${value}`;
-                        console.log("Counting case data: " + j % 4); //~~~~~~
                         break;
                     //for other cells, copy the value to the cell
                     default:
                         newCell.textContent = rowData[cellKey];
                         stuff = rowData[cellKey];
-                        console.log("Counting default: " + j % 4 + "    Data: " + stuff);//~~~~~~~~~~~~~
                 }
-                j++; //~~~~~~~~~~~~~~~~~~~~~~~~
-            } 
-            const newerCell = newRow.insertCell(-1);
-            newerCell.textContent = datatypeToUnit(datatype);         
+            }
+            
+
         }
     };
 

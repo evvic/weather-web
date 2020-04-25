@@ -7,9 +7,14 @@ const tableBody = document.getElementsByTagName("tbody")[0];
 const getDataModern = async () => {
     // Todo: fetch data
 
-    //fetch data using modern Fetch api
-    const data = await fetch("http://bowd9-api.course.tamk.cloud/v1/weather");
-    //OG: http://webapi19sa-1.course.tamk.cloud/v1/weather
+    //fetch data using modern Fetch api 
+    const data = await fetch("http://webapi19sa-1.course.tamk.cloud/v1/weather/");
+    /*
+        MY databse: http://bowd9-api.course.tamk.cloud/v1/weather 
+            Currently not using mine because lab is shut down from Corona so my team and others cannot
+            hook our Arduinos to the weather measuring devices to send real weather data to the DB
+        TAMK database: http://webapi19sa-1.course.tamk.cloud/v1/weather
+    */
     //keyword 'await' can only be used inside async function
 
     //get actual JSON data 

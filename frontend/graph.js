@@ -1,4 +1,4 @@
-console.log("Loading temp.js...");
+console.log("Loading graph.js...");
 
 // initiazlization
 const getDataModern = async () => {
@@ -20,7 +20,7 @@ const getDataModern = async () => {
     //remove old data from table    
     $("tbody").children().remove();
 
-    console.log("going to fetch json data");
+    console.log("going to fetch json data... " + interval + " hours of " + datatype);
     //fetch data using modern Fetch api
     const data = await fetch(`http://webapi19sa-1.course.tamk.cloud/v1/weather/${datatype}/${interval}`);
     //keyword 'await' can only be used inside async function
@@ -52,7 +52,6 @@ const getDataModern = async () => {
             const dataname = datatypeToOfficial(datatype); //change to more formal style
             const newCell = newRow.insertCell(-1);
             newCell.textContent = dataname;
-        //////////////////////////////////
 
         for(cellKey of cellKeys) {
             
@@ -91,6 +90,75 @@ const getDataModern = async () => {
         i++;
     }
 };
+
+//////////////////////////////////////////////
+//      Chart.js from common
+//////////////////////////////////////////////
+
+var canvas = document.getElementById('mychart');
+
+var data = {
+    labels : [],
+    datasets: [
+        {
+            lineTension: 0.3,
+            label:`${document.getElementById("datatype").value} values`,
+            data : [],
+
+            backgroundColor:datatypeToColor(document.getElementById("datatype").value), //cahnegs all bar colors
+            hoverBorderWidth:10,
+            hoverBorderColor:datatypeToColor(document.getElementById("datatype").value),
+        }
+    ]
+};
+
+var options = {
+    showLines: true,
+    responsive: true,
+    title:{
+        display:true,
+        text:`${datatypeToOfficial(document.getElementById("datatype").value)} Over ${document.getElementById("interval").value} Hours`, 
+        fontSize:30
+    },
+    legend:{
+        display:true, //false doesn't display legend
+        position:'top',
+        labels:{
+            fontColor:'#420'
+        }
+    },
+    layout:{
+        padding:{
+            left:15, //adds whitespace pixels to the left
+            right:15,
+            bottom:15,
+            top:15,
+        }
+    },
+    scales: {
+        yAxes: [{
+            scaleLabel: {
+                display: true,
+                labelString: datatypeToUnit(document.getElementById("datatype").value)
+            }
+        }],
+        xAxes: [{
+            scaleLabel: {
+                display: true,
+                labelString: 'Hours (past to current)'
+            }
+        }]
+    },
+    tooltips:{
+        enabled:true
+    }
+};
+
+// Create weatherChart with defaults, empty
+var weatherChart = Chart.Line(canvas,{
+    data:data,
+    options:options,
+});
 
 ////////////////////////////////////////////
 //      Chart.js bar <-> line

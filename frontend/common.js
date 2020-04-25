@@ -18,17 +18,49 @@ const navbarHtml = `
                 <a class="nav-link" href="/latest_values.html">Latest Values</a>
             </li>
             <li class="nav-item">
+                  <a class="nav-link" href="/last500.html">Last 500</a>
+            </li>
+            <li class="nav-item">
                   <a class="nav-link" href="/datadump.html">Datadump</a>
             </li>
+            
+            <li class="nav-item">
+                  <a class="nav-link" href="/temp.html">-temp-</a>
+            </li>
+            
         </ul>
- 
+        
 </nav>
 `;
 
 const navbarElement = document.getElementById("navbar-element");
 navbarElement.innerHTML=navbarHtml;
+
 /*
     Navbar ends
+*/
+
+/*
+    Footer starts
+*/
+
+const footerHtml = `
+<footer  style="background-color: #EAEDED">
+    <div class="container">
+        <!-- Copyright -->
+        <div class="footer-copyright text-center py-3 text-black-50">Eric Brown 2020 
+            <a target="_blank" href="https://github.com/evvic" class="text-info">GitHub</a>
+        </div>
+        <!-- Copyright -->
+    </div>
+</footer>
+`;
+
+const footerElement = document.getElementById("footer-element");
+footerElement.innerHTML=footerHtml;
+
+/*
+    Footer ends
 */
 
 /////////////////////////////////////////////
@@ -86,19 +118,19 @@ function datatypeToColor(datatype) {
 
 function datatypeToUnit(datatype) { //returns appropriate unit of datatype
     if(datatype == "temperature") {
-        return "(Celsius) °C";
+        return "°C (Celsius)";
     }
     if(datatype == "wind_speed") {
         return "km/h";
     }
     if(datatype == "wind_direction") {
-        return "(degrees) °";
+        return "° (degrees)";
     }
     if(datatype == "humidity_in") {
-        return "(grams of water vapor per kg of air) g.kg-1";
+        return "g.kg-1 (grams of water vapor per kg of air)";
     }
     if(datatype == "humidity_out") {
-        return "(grams of water vapor per kg of air) g.kg-1";
+        return "g.kg-1 (grams of water vapor per kg of air)";
     }
     if(datatype == "light") {
         return "lx (Lux)";
@@ -108,33 +140,49 @@ function datatypeToUnit(datatype) { //returns appropriate unit of datatype
     }
 }
 
-function returnFormattedHour(index) {
-    /*
-        THIS WORKS!
-        BUT, CHECK THE TABLE SYNCHRONIZATION, WILL PROBABLY NEED TO 
-        PASS labelVal and parse date out of the string to be most accurate
-    */
-    var d = new Date();
-    var n = d.getHours();
+/////////////////////////////////////////
+//      JSON time reformatted
+/////////////////////////////////////////
 
-    var adjHour =  n - (document.getElementById("interval").value - index);
+function returnFormattedHour(jsonTime) {
+        // JSON encoded date
+    var json = "2020-04-25T11:07:48.404Z";
+    console.log(json);
 
-    while(adjHour < 0) {
-        adjHour += 24;
-    }
-
-    return adjHour + ":00";
+    //var dateStr = JSON.parse(json);  
+    //console.log(dateStr); // 2014-01-01T23:28:56.782Z
+            
+    var date = new Date(json);
+    console.log(date);
+    console.log("Hour: " + date.getHours());  // Wed Jan 01 2014 13:28:56 GMT-1000 (Hawaiian Standard Time)
+    console.log("Day of the month (1-31): " + date.getDate());
+    console.log("Month  (0-11): " + date.getMonth());
+    console.log("Minutes: " + date.getMinutes());
 }
 
 ///////////////////////////////////////////////////////
 //      Chart.js setup below
 ///////////////////////////////////////////////////////
 
-function addData(index, labelVal, dataVal) {
+function formatChartTimeAxis() {
+
+}
+
+function addData(index, timeVal, dataVal) {
     ///https://www.youtube.com/watch?v=De-zusP8QVM
 
+    //  Y-axis (data value)
     weatherChart.data.datasets[0].data[index] = dataVal;
+
+    //  X-axis (time)
     
+    /*
+        Current project
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        work with returnFormattedHour(jsonTime)
+        & formatChartTimeAxis() to fix time (x) axis
+    */
+
     if(index == document.getElementById("interval").value) {
         weatherChart.data.labels[index] = 'LIVE NOW';
     }
@@ -167,6 +215,12 @@ function updateWeatherChart() {
 
     weatherChart.update();
 }
+
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//MOVED TO GRAPH.JS
+
+/*
 
 var canvas = document.getElementById('mychart');
 
@@ -231,4 +285,4 @@ var options = {
 var weatherChart = Chart.Line(canvas,{
     data:data,
     options:options,
-});
+}); */
