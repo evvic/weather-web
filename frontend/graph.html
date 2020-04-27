@@ -24,7 +24,7 @@
         <center>
             <label for="datatype">Choose Data Type</label>
 
-            <select id="datatype" style="margin:10px;" onchange="getDataModern()">
+            <select id="datatype" style="margin:10px;" onchange="choosePath()">
                 <option value="temperature">Temperature</option>
                 <option value="wind_speed">Wind Speed</option>
                 <option value="wind_direction">Wind Direction</option>
@@ -36,7 +36,8 @@
 
             <label for="interval" style="margin:5px;">Time Interval</label>
 
-            <select id="interval" onchange="getDataModern()">
+            <select id="interval" onchange="choosePath()">
+                <option value="0">Now</option>
                 <option value="24">Last 24 hours</option> <!--24 hours-->
                 <option value="48">Last 2 days</option> <!--48 hours-->
                 <option value="72">Last 3 days</option> <!--48 hours-->
@@ -60,7 +61,7 @@
                 <thead>
                     <tr>
                         <th>Data Type</th>
-                        <th>Time</th>
+                        <th>Time (Average Per Hour)</th>
                         <th>Data</th>
                     </tr>
                 </thead>

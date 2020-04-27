@@ -140,6 +140,50 @@ function datatypeToUnit(datatype) { //returns appropriate unit of datatype
     }
 }
 
+function formatTableDate(timeVal) {
+    var date = new Date(timeVal);
+
+    const shortMonths = [
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'Jun',
+        'Jul',
+        'Aug',
+        'Sep',
+        'Oct',
+        'Nov',
+        'Dec'
+    ]
+
+    const days = [
+        'Sun',
+        'Mon',
+        'Tue',
+        'Wed',
+        'Thu',
+        'Fri',
+        'Sat'
+    ]
+
+    //format mins with correct :00
+    if(date.getMinutes() < 10) { var mins = "0" + date.getMinutes(); }
+    else { var mins = date.getMinutes(); }
+
+    //format secs with correct :00
+    if(date.getSeconds() < 10) { var secs = "0" + date.getSeconds(); }
+    else { var secs = date.getSeconds(); }
+
+    var forDate = `${date.getHours()}:${mins}:${secs} ${days[date.getDay()]} ${shortMonths[date.getMonth()]} ${date.getDate()} ${date.getFullYear()}`;
+    return forDate;
+}
+
+function formattedInterval(interval) {
+
+}
+
 /////////////////////////////////////////
 //      JSON time reformatted
 /////////////////////////////////////////
@@ -164,35 +208,115 @@ function returnFormattedHour(jsonTime) {
 //      Chart.js setup below
 ///////////////////////////////////////////////////////
 
-function formatChartTimeAxis() {
+function formatLabelString(interval) {
+    //labelling x-axis
 
+    // "now" interval
+    if(interval == 0) {
+        console.log("interval == " + interval + "     in formatLabelString");
+        return 'Time in hours (past to current)';
+    }
+    // less than a week intervals
+    else if(interval < 168 && interval > 0) {
+        console.log("interval == " + interval + "      in formatLabelString");
+        return 'Hours (past to current)';
+    }
+    // week or over intervals
+    else {
+        console.log("interval == " + interval + "      in formatLabelString");
+        return 'Hours & Days (past to current)';
+    }
+
+}
+
+function formatChartTitle(datatype, interval) {
+    //displays a different title depending on interval (esp. if interval = now)
+
+    const formalDataType = datatypeToOfficial(datatype);
+
+    var inter;
+
+    // "Now" title
+    if(interval == 0) {
+        inter = "Last 20 Values";
+    }
+    // regular interval title
+    else if(interval > 0 && interval < 168) {
+        inter = `${interval} Hours`;
+    }
+    else {
+        inter = `${interval / 24} Days`;
+    }
+
+    console.log(`${formalDataType} Over ${inter}`);
+    return `${formalDataType} Over ${inter}`;
+}
+
+function formatChartTimeAxis(timeVal, interval) {
+    // 15:00 Tue Jan
+
+    const shortMonths = [
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'Jun',
+        'Jul',
+        'Aug',
+        'Sep',
+        'Oct',
+        'Nov',
+        'Dec'
+      ]
+
+      const days = [
+        'Sun',
+        'Mon',
+        'Tue',
+        'Wed',
+        'Thu',
+        'Fri',
+        'Sat'
+    ]
+
+    var date = new Date(timeVal);
+
+    //console.log(date);
+    //console.log("Hour: " + date.getHours());  // Wed Jan 01 2014 13:28:56 GMT-1000 (Hawaiian Standard Time)
+    //console.log("Day of the month (1-31): " + date.getDate());
+    //console.log("Month  (0-11): " + date.getMonth());
+    //console.log("Minutes: " + date.getMinutes());
+    var UTC_offset = date.getTimezoneOffset() / 60; //originally gives offset in mins, convert to hours
+
+    //format mins with correct :00
+    if(date.getMinutes() < 10) { var mins = "0" + date.getMinutes(); }
+    else { var mins = date.getMinutes(); }
+
+    var strDate = date.getHours() + ":" + mins + " " + days[date.getDay()];
+
+    //if interval >= week, also display month
+    if(interval >= 168)  { 
+        //168 = weeks in hours
+        strDate = strDate +  " " + shortMonths[date.getMonth()];
+    }
+
+    return strDate;
 }
 
 function addData(index, timeVal, dataVal) {
     ///https://www.youtube.com/watch?v=De-zusP8QVM
 
+    var interval = document.getElementById("interval").value
+
     //  Y-axis (data value)
     weatherChart.data.datasets[0].data[index] = dataVal;
 
     //  X-axis (time)
-    
-    /*
-        Current project
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        work with returnFormattedHour(jsonTime)
-        & formatChartTimeAxis() to fix time (x) axis
-    */
-
-    if(index == document.getElementById("interval").value) {
-        weatherChart.data.labels[index] = 'LIVE NOW';
-    }
-    else {
-        //weatherChart.data.labels[index] =  returnFormattedHour(index);
-        weatherChart.data.labels[index] = `${document.getElementById("interval").value - index}:00`; //"11:00 AM";
-    }
+    weatherChart.data.labels[index] = formatChartTimeAxis(timeVal, interval);
     
     weatherChart.update();
-    console.log("addData() updated...");
+    // console.log("addData() updated...");
 }
 
 function resetData() {
@@ -201,6 +325,8 @@ function resetData() {
     weatherChart.data.labels = [];
 }
 
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 function updateWeatherChart() {
     console.log("updateWeatherChart()");
 
@@ -210,79 +336,9 @@ function updateWeatherChart() {
     weatherChart.data.datasets[0].hoverBorderColor = datatypeToColor(document.getElementById("datatype").value);
 
     //update options -> Title Text
-    weatherChart.options.title.text = `${datatypeToOfficial(document.getElementById("datatype").value)} Over ${document.getElementById("interval").value} Hours`;
+    weatherChart.options.title.text = formatChartTitle(document.getElementById("datatype").value, document.getElementById("interval").value);
     weatherChart.options.scales.yAxes[0].scaleLabel.labelString = datatypeToUnit(document.getElementById("datatype").value);
+    weatherChart.options.scales.xAxes[0].scaleLabel.labelString = formatLabelString(document.getElementById("interval").value);
 
     weatherChart.update();
 }
-
-
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-//MOVED TO GRAPH.JS
-
-/*
-
-var canvas = document.getElementById('mychart');
-
-var data = {
-    labels : [],
-    datasets: [
-        {
-            lineTension: 0.3,
-            label:`${document.getElementById("datatype").value} values`,
-            data : [],
-
-            backgroundColor:datatypeToColor(document.getElementById("datatype").value), //cahnegs all bar colors
-            hoverBorderWidth:10,
-            hoverBorderColor:datatypeToColor(document.getElementById("datatype").value),
-        }
-    ]
-};
-
-var options = {
-    showLines: true,
-    responsive: true,
-    title:{
-        display:true,
-        text:`${datatypeToOfficial(document.getElementById("datatype").value)} Over ${document.getElementById("interval").value} Hours`, 
-        fontSize:30
-    },
-    legend:{
-        display:true, //false doesn't display legend
-        position:'top',
-        labels:{
-            fontColor:'#420'
-        }
-    },
-    layout:{
-        padding:{
-            left:15, //adds whitespace pixels to the left
-            right:15,
-            bottom:15,
-            top:15,
-        }
-    },
-    scales: {
-        yAxes: [{
-            scaleLabel: {
-                display: true,
-                labelString: datatypeToUnit(document.getElementById("datatype").value)
-            }
-        }],
-        xAxes: [{
-            scaleLabel: {
-                display: true,
-                labelString: 'Hours (past to current)'
-            }
-        }]
-    },
-    tooltips:{
-        enabled:true
-    }
-};
-
-// Create weatherChart with defaults, empty
-var weatherChart = Chart.Line(canvas,{
-    data:data,
-    options:options,
-}); */

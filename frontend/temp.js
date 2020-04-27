@@ -17,28 +17,11 @@ console.log("Minutes: " + date.getMinutes());
 
 */
 
-// Copy an existing select element
-var cloned = $('select[name="select1"]').clone();
-
-// Each time someone changes a select
-$('select.questions').live('change',function() {
-    // Get the current values, then reset the selects to their original state
-    var hidden,[];
-    $('select.questions').each(function() {
-        hidden.push($(this).val());
-        $(this).html(cloned.html());
-    });
-    // Look through the selects
-    for (var i in hidden) {
-        $('select.questions').each(function() {
-            // If this is not the current select
-            if ((parseInt(i)) != $(this).parent().index()) {
-                // Remove the ones that were selected elsewhere
-                $(this).find('option[value="'+hidden[i]+'"]').not('option[value="0"]').remove();
-            } else {
-                // Otherwise, just select the right one
-                $(this).find('option[value="'+hidden[i]+'"]').not('option[value="0"]').attr('selected','selected');
-            }
-        });
+function show() {
+    let click = document.getElementById('drop-content');
+    if(click.style.display === 'none'){
+     click.style.display = 'block';
+    } else {
+     click.style.display = 'none';
     }
-});
+}show();
