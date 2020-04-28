@@ -1,0 +1,1 @@
+console.log("loading latest_data.js");

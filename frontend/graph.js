@@ -94,7 +94,9 @@ const getDataModern = async () => {
     // if not receiving enough data to complete the time intervl...
     if(index < interval) {
         console.log("ERROR: lacking JSON data. TAMK lab isn't sending enough data to database.");
-        alert("ERROR: lacking JSON data.\nTAMK lab isn't sending enough data to database to properly fill chart.")
+        alert(`ERROR: lacking JSON data.
+        \nTAMK lab isn't sending enough data to database to properly fill chart.
+        \nTry a higher interval for better results.`);
     }
 };
 

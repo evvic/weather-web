@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <!--<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">-->     
+        <!--Animate.css-->
+        <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" 
+            href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" 
+            integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+            crossorigin="anonymous">
+        <link rel="icon"
+            type="image/png"
+            href="images/weather_icon.png">
+
+        <title>Latest Data</title>
+    </head>
+    <body>
+
+    <style type="text/css">
+        *{
+            margin:0;
+            padding:0;
+            border:0;
+        }
+        .margin{
+            margin: 75% 0;
+        }
+        .parallax{
+            background: url("/images/ethernet_module_close.jpg")
+            repeat fixed 0%;
+            background-attachment: fixed;
+            background-position: 50% 0 !important;
+            background-size: 100% 140%;
+        }
+        .parallax-inner{
+            padding-top: 5%;
+            padding-bottom: 5%;
+        }
+        h1{
+            text-align: center;
+            font-size: 500%;
+            color: #FFF;
+            letter-spacing:normal;
+            margin-bottom: 5%;
+        }
+        .container{
+            margin-top:8%;
+            margin-left:8%;
+        } 
+        .card:hover{
+            -webkit-box-shadow: -1px 9px 40px -12px rgba(0,0,0,0.75);
+            -moz-box-shadow: -1px 9px 40px -12px rgba(0,0,0,0.75);
+            box-shadow: -1px 9px 40px -12px rgba(0,0,0,0.75);
+        }
+        .anim-delay-100ms{ animation-delay: 0.1s }
+        .anim-delay-300ms{ animation-delay: 0.3s }
+        .anim-delay-500ms{ animation-delay: 0.5s }
+        .footie{
+            margin:0 auto;
+            background-color: #FFB7B2;
+            text-align: center;
+            padding-bottom:2%;
+            padding-top:2%;
+        }
+        
+
+    </style>
+
+    <!--NAVBAR BEGIN-->
+    <div id="navbar-element"></div>
+    <!--NAVBAR ENDS-->
+
+    <!--<section id="feature">
+        <div class="container gap100">
+
+        </div>
+    </section>-->
+        
+    <section class="parallax">
+        <div class="parallax-inner">
+            <h1 class="pb-1 animated wow flipInX">Latest Data</h1>
+            <div class="row">
+                <div class="col-3 mx-auto">
+                    <div class="card animated wow fadeInUp anim-delay-100ms" style="width:18rem;">
+                        <div class="card-body">
+                            <h5 class="card-title">Latest Values</h5>
+                            <p class="card-text">
+                                Table of ordered latest values by given weather data type.
+                            </p>
+                            <a href="/latest_values.html" class="btn btn-primary">Open</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3 mx-auto">
+                    <div class="card animated wow fadeInUp anim-delay-300ms" style="width:18rem;">
+                        <div class="card-body">
+                            <h5 class="card-title">Last 500</h5>
+                            <p class="card-text">
+                                Order of latest values with no specific data type.
+                            </p>
+                            <a href="/last500.html" class="btn btn-primary">Open</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3 mx-auto">
+                    <div class="card animated wow fadeInUp anim-delay-500ms" style="width:18rem;">
+                        <div class="card-body">
+                            <h5 class="card-title">Data dump</h5>
+                            <p class="card-text">
+                                List of the latest data added to the database.
+                            </p>
+                            <a href="/datadump.html" class="btn btn-primary">Open</a>
+                        </div>
+                    </div>
+                </div>
+            
+            </div>
+        </div>
+    </section>
+
+    <div class="footie">
+        <h2>Project Information</h2>
+        <p5>Here is some Information about this project</p5>
+    </div>
+
+    <br>
+    <p>     Thank you Kaari, Esa #1, and Esa #2 for teaching and always helping when I have questions.</p>
+    <p>     Shoutout to my best friend since birth Austin Pope who always gives me advice and talks to me about codinh</p>
+
+    <!--FOOTER BEGIN-->
+    <div id="footer-element"></div>
+    <!--FOOTER ENDS-->
+   
+    <!-- jQuery, Popper.js, Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.js"></script>
+
+    <script src="common.js"></script>
+    <script src="latest_data.js"></script>
+    
+    <script>
+	    var wow = new WOW(
+        {
+            boxClass:     'wow',      // animated element css class (default is wow)
+            animateClass: 'animated', // animation css class (default is animated)
+            offset:       0,          // distance to the element when triggering the animation (default is 0)
+            mobile:       true,       // trigger animations on mobile devices (default is true)
+            live:         true,       // act on asynchronously loaded content (default is true)
+            callback:     function(box) {
+            // the callback is fired every time an animation is started
+            // the argument that is passed in is the DOM node being animated
+            },
+            scrollContainer: null,    // optional scroll container selector, otherwise use window,
+            resetAnimation: true,     // reset animation on end (default is true)
+        }
+        );
+        wow.init();
+	</script>
+    
+    </body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

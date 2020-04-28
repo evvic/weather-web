@@ -1,44 +1,109 @@
-<!DOCTYPE html>
-
-<html>
+<!doctype html>
+<html lang="en">
     <head>
-        <title>Weather app</title>
+        <!-- Required meta tags -->
+        <!--<meta charset="utf-8">-->
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">      
+        <!--Animate.css-->
+        <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+        <!-- Bootstrap CSS -->
         <link rel="stylesheet" 
-        href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" 
-        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
-        crossorigin="anonymous">
+            href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" 
+            integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+            crossorigin="anonymous">
         <link rel="icon"
-          type="image/png"
-          href="weather_icon.png">
+            type="image/png"
+            href="images/weather_icon.png">
+
+        <title>Weather-app</title>
     </head>
     <body>
-        <!--NAVBAR BEGIN-->
-        <div id="navbar-element"></div>
-        <!--NAVBAR ENDS-->
 
-        <center>
-            <h2>Weather app</h2>
-            <br>
-            
-            <img src="iot_2020.png" style="margin:auto; width:50%;" alt="arrow map from Arduino to frontend"/>
-        </center>
-        
-        <!--FOOTER BEGIN-->
-        <div id="footer-element"></div>
-        <!--FOOTER ENDS-->
+    <!--NAVBAR BEGIN-->
+    <div id="navbar-element"></div>
+    <!--NAVBAR ENDS-->
+  
+    <div class="container">
+        <div class="row text-center mt-5">
+            <div class="col-md-12">
+                <h1 class="animated flipInX">Weather App</h1>
+            </div>
+        </div>
+   	    <div class="row mt-5">
+   		    <div class="col-md-6">
+                <img src="images/iot_2020.png" alt="arrow map from Arduino to frontend" class="img-fluid wow slideInUp">
+            </div>
+                <div class="col-md-6">
+                    <h2>How Weather Signals Are Recorded and Displayed</h2>
+                    <p>Using weather measuring devices available in the TAMK lab, my group and I wired an Arduino, LCD, ethernet module, and more together to create a functioning device which can take analog signals from the measuring device and ultimately send them to my database to display on this website. </p>
+                    <p>My website then uses created API endpoints from the backend to sort and display the data in meaningful ways.</p>
+                    <p>The frontend of the webpage uses charts and tables to display the data in a sorted way. These charts and tables all are coded with pure JavaScript.</p>
+    
+                </div>
+   	        </div>
+        </div>
+   
+   
+    <div class="container">
+        <div class="row text-center mt-5">
+            <div class="col-md-12" >
+                <h1 class="animated wow flipInX">Sending Data</h1>
+            </div>
+        </div>
+   	    <div class="row mt-5">
+   		    <div class="col-md-6">
+   		        <h2>Use Of MQTT Messaging To The Broker</h2>
+   		        <p>After the Arduino received a weather signal, it translates the signal to an understandable value then formats an MQTT message with the value and datatype (i.e. our group is wind_speed). The message is then sent to the MQTT broker.</p>
+                <p>The MQTT broker is a VirtualMacine on campus that accepts the MQTT message. Which then runs the C++ gateway code to parse the MQTT message into a JSON formatted message and sends it to my database.</p>
+                <p>Finally the JSON data is just stored in my database, to be called and sorted on this wesite.</p>
+   		    </div>
+   	        <div class="col-md-6">
+                <img src="images/Arduino_laptop_router.jpg" alt="working on Arduino in my apartment connected to router" class="img-fluid wow slideInUp">
+            </div>
+   	    </div>
+   	</div>
+   
+    <br>
 
-        <!-- Load JavaScript files here, just above closing body tag -->
-        <script src="common.js"></script>
+    <footer>
+        <div class="container">
+            <div class="footer-copyright text-center py-3 text-black-50">"Software Americans" 2020  Eric, Oscar & Jaakko</div>
+        </div>
+    </footer>
+    <br>
+    <!--FOOTER BEGIN-->
+    <div id="footer-element"></div>
+    <!--FOOTER ENDS-->
+   
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.js"></script>
+
+    <script src="common.js"></script>
+    <script src="temp.js"></script>
+    
+    <script>
+	    var wow = new WOW(
+        {
+            boxClass:     'wow',      // animated element css class (default is wow)
+            animateClass: 'animated', // animation css class (default is animated)
+            offset:       0,          // distance to the element when triggering the animation (default is 0)
+            mobile:       true,       // trigger animations on mobile devices (default is true)
+            live:         true,       // act on asynchronously loaded content (default is true)
+            callback:     function(box) {
+            // the callback is fired every time an animation is started
+            // the argument that is passed in is the DOM node being animated
+            },
+            scrollContainer: null,    // optional scroll container selector, otherwise use window,
+            resetAnimation: true,     // reset animation on end (default is true)
+        }
+        );
+        wow.init();
+	</script>
+    
     </body>
 </html>
-
-<!--WORK IN PROGRESS 4-6-20
-    npx live-server in frontend/weather-app to test
-    pipeline->job passed!
-    
-    currently stuck on:
-    datadump.js
-        cannot find table insertRow() for some reason
-        maybe ask for help
-        table resources may not all being loaded
--->
