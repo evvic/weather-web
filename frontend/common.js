@@ -156,6 +156,32 @@ function datatypeToUnit(datatype) { //returns appropriate unit of datatype
     }
 }
 
+function datatypeToUnitRaw(datatype) { //returns appropriate unit of datatype
+    console.log("datatypeToUnitRaw()" + datatype);
+    if(datatype == "temperature") {
+        console.log("datatypeToUnitRaw() -> " + datatype);
+        return "°C";
+    }
+    if(datatype == "wind_speed") {
+        return "km/h";
+    }
+    if(datatype == "wind_direction") {
+        return "°";
+    }
+    if(datatype == "humidity_in") {
+        return "g.kg-1";
+    }
+    if(datatype == "humidity_out") {
+        return "g.kg-1";
+    }
+    if(datatype == "light") {
+        return "lx";
+    }
+    if (datatype == "rain") {
+        return "mm/h";
+    }
+}
+
 function formatTableDate(timeVal) {
     var date = new Date(timeVal);
 

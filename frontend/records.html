@@ -24,7 +24,184 @@
     <div id="navbar-element"></div>
     <!--NAVBAR ENDS-->
         
-    <p>temp html file</p>
+    <style type="text/css">
+        *{
+            margin:0;
+            padding:0;
+            border:0;
+        }
+        .margin{
+            margin: 75% 0;
+        }
+        .parallax{
+            background: url("/images/walking_on_lake.jpg")
+            repeat fixed 0%;
+            background-attachment: fixed;
+            background-position: 30% 50% !important;
+            background-size: 100% 180%;
+        }
+        .parallax-inner{
+            padding-top: 3%;
+            padding-bottom: 3%;
+        }
+        h1{
+            text-align: center;
+            font-size: 500%;
+            color: #FFF;
+            letter-spacing:normal;
+            margin-bottom: 3%;
+        }
+        h3{
+            text-align: center;
+            font-size: 150%;
+            color: rgba(233, 233, 233, 0.959);
+            letter-spacing:normal;
+            margin-bottom: 1%;
+        }
+        .container{
+            margin-top:8%;
+            margin-left:8%;
+        } 
+        .card:hover{
+            -webkit-box-shadow: -1px 9px 40px -12px rgba(0,0,0,0.75);
+            -moz-box-shadow: -1px 9px 40px -12px rgba(0,0,0,0.75);
+            box-shadow: -1px 9px 40px -12px rgba(0,0,0,0.75);
+        }
+        .temperature:hover{
+            background-color: #FDDFDF;
+        }
+        .wind_speed:hover{
+            background-color: #DEFDE0;
+        }
+        .rain:hover{
+            background-color: #DEF3FD;
+        }
+        .light:hover{
+            background-color: #FCF7DE;
+        }
+        .humidity_in:hover{
+            background-color: #F0DEFD;
+        }
+        .humidity_out:hover{
+            background-color: rgb(255, 233, 208);
+        }
+        .anim-delay-100ms{ animation-delay: 0.1s }
+        .anim-delay-200ms{ animation-delay: 0.2s }
+        .anim-delay-300ms{ animation-delay: 0.3s }
+        .anim-delay-400ms{ animation-delay: 0.4s }
+        .anim-delay-500ms{ animation-delay: 0.5s }
+        .anim-delay-600ms{ animation-delay: 0.6s }
+        .anim-delay-5000ms{ animation-delay: 5.0s }
+        .footie{
+            margin:0 auto;
+            background-color: #F3FAF1;
+            text-align: center;
+            padding-bottom:2%;
+            padding-top:2%;
+        }
+        .p5{
+            padding:auto;
+            margin:auto;
+        }
+        
+
+    </style>
+
+
+
+
+    <section class="parallax">
+        <div class="parallax-inner">
+            <h1 class="pb-1 animated wow flipInX">Weather Records</h1>
+            <h3 class="notify animated wow fadeOutDown anim-delay-5000ms">*calculating values may take a minute to load*</h3>
+            <div class="row">
+
+                <div class="col-3 mx-auto">
+                    <div class="card temperature animated wow fadeInUp anim-delay-100ms" style="width:18rem;">
+                        <div class="card-body" id="temperature">
+                            <h5 class="card-title">Temperature</h5>
+                            <p class="card-text">
+                                <div id="maxtemperature"></div>
+                                <div id="mintemperature"></div>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-3 mx-auto">
+                    <div class="card wind_speed animated wow fadeInUp anim-delay-300ms" style="width:18rem;">
+                        <div class="card-body" id="wind_speed">
+                            <h5 class="card-title">Wind Speed</h5>
+                            <p class="card-text">
+                                <div id="maxwind_speed"></div>
+                                <div id="minwind_speed"></div>
+                                
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-3 mx-auto">
+                    <div class="card rain animated wow fadeInUp anim-delay-500ms" style="width:18rem;">
+                        <div class="card-body">
+                            <h5 class="card-title">Rain</h5>
+                            <p class="card-text">
+                                <div id="maxrain"></div>
+                                <div id="minrain"></div>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            
+            </div>
+
+            <br><br><br>
+
+            <div class="row">
+                <div class="col-3 mx-auto">
+                    <div class="card light animated wow fadeInUp anim-delay-200ms" style="width:18rem;">
+                        <div class="card-body">
+                            <h5 class="card-title">Light</h5>
+                            <p class="card-text">
+                                <div id="maxlight"></div>
+                                <div id="minlight"></div>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-3 mx-auto">
+                    <div class="card humidity_in animated wow fadeInUp anim-delay-400ms" style="width:18rem;">
+                        <div class="card-body">
+                            <h5 class="card-title">Humidity In</h5>
+                            <p class="card-text">
+                                <div id="maxhumidity_in"></div>
+                                <div id="minhumidity_in"></div>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-3 mx-auto">
+                    <div class="card humidity_out animated wow fadeInUp anim-delay-600ms" style="width:18rem;">
+                        <div class="card-body">
+                            <h5 class="card-title">Humidity Out</h5>
+                            <p class="card-text">
+                                <div id="maxhumidity_out"></div>
+                                <div id="minhumidity_out"></div>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            
+            </div>
+        </div>
+    </section>
+
+    <div class="footie">
+        <h2>Records of Min & Max May Load Slowly</h2>
+        <p5>For some odd reason the min/max API endpoints can take awhile to load. Although all the test points are in the same index.js file, retrieving a 'minimum' from the database takes longer than loading, for example, the last 500 JSON values. I presume calculating min/max is much harder than retrieving recent values.</p5>
+    </div>
         
     <!--FOOTER BEGIN-->
     <div id="footer-element"></div>
@@ -38,7 +215,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.js"></script>
 
     <script src="common.js"></script>
-    <script src="temp.js"></script>
+    <script src="records.js"></script>
     
     <script>
 	    var wow = new WOW(
