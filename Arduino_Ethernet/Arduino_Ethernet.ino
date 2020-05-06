@@ -5,7 +5,6 @@
 //    Ethernet (2) module with W55100   / BLUE module
 
 
-
 #include <LiquidCrystal.h>                            // include LCD library
 
 #include <Ethernet2.h>                              // include Ethernet libarty W5500 library
@@ -15,19 +14,32 @@
 #include <TimerOne.h>                                 // include timer library
 
 
-
-
 //                   RS  E   D4  D5  D6  D7
      LiquidCrystal lcd(12, 11, 5, 4, 3, 2);            // LCD pin wiring settings for MEGA
 //   LiquidCrystal lcd(8,  7,  6,  5,  4,  3);            // LCD pin wiring settings fro NANO
 
+
+////////////////////////////////////////////////////////////////////////////////////
+//
+//  reading weather signal variables
+//
+////////////////////////////////////////////////////////////////////////////////////
+
+#define intpin 21
+volatile byte pulse = 0;
+volatile byte time = 0;
+
+double GetAnalogWeatherVal();
+
+/////////////////////////////////////////////////////////////////////////////////////////////  
+//
+//                             MAC nro                                                  
+//
+/////////////////////////////////////////////////////////////////////////////////////////     
+
                                                       
 EthernetClient ethClient;                               // Ethernet object var  
-
- 
-/////////////////////////////////////////////////////////////////////////////////////////////  
-///                               MAC nro                                                  //
-///     
+  
                     //      Not relevat with Ethershield  
 static uint8_t mymac[6] = { 0x44,0x76,0x58,0x10,0x00,0x73 };
                                                                                           ///
@@ -42,18 +54,14 @@ static uint8_t mymac[6] = { 0x44,0x76,0x58,0x10,0x00,0x73 };
 
  byte server[] = { 193,167,167,59 };                 // TAMK IP
 
- 
  char* deviceId     = "Merica";           // * set device id (will be the MQTT client username) 
  char* clientId     = "Uhhmerica";        // * set a random string (max 23 chars, will be the MQTT client id) 
  char* deviceSecret = "tamk1";            // * set device secret (will be the MQTT client password) 
 
-                                                      // MQTT Server settings  
-
-  
+// MQTT Server settings   
 void callback(char* topic, byte* payload, unsigned int length); // subscription callback for received MQTTT messages   
 
 PubSubClient client(server, Port, callback, ethClient);   // mqtt client 
-
 
 //////////////// MQTT topic names  ///////////////////////////
 
@@ -81,6 +89,16 @@ void setup() {
 
     Serial.println("Start 18.4.2020");                   // print to serial monitor
 
+    /////////////Initializing reading pulse to calculate frequency///////////////
+      pinMode(intpin,INPUT);
+      attachInterrupt(digitalPinToInterrupt(intpin), pulse_interrupt, RISING);
+      
+      Timer1.initialize(500000);
+      Timer1.attachInterrupt(Timer_int_routine);
+    /////////////////////////////////////////////////////////////////////////////
+
+    sensorValue = analogRead(A5);                       // Reading alanog inut of weather measuring device
+
     delay(500);
 
     
@@ -99,12 +117,15 @@ void setup() {
 
 void loop()     //  main code here 
 {
-int inx;
+double inx;
   
 while(true) 
   {  
     //TESTING RANDOM WIND SPEEDS ARE SENT
     inx = random(0, 18); //random windspeed from 0 - 18 km / h
+
+    //This function WOULD be used to receive input from a  measuring device at the TAMK lab, but currently not connected #DamCorona
+    //inx = GetAnalogWeatherVal(); //returns wind speed in km/h
     
     lcd.setCursor(0,3);                                 // set curosor to left upper corner
     
@@ -159,8 +180,7 @@ void fetch_IP(void)
   Serial.print( F("\nW5500 Revision ") );
     
   if ( rev == 0){
-                   
-                      Serial.println( F( "Failed to access Ethernet controller" ) );
+                    Serial.println( F( "Failed to access Ethernet controller" ) );
                    
                                                 // 0123456789012345689 
                     lcd.setCursor(0,0); lcd.print(" Ethernet failed   ");
@@ -221,15 +241,9 @@ void send_MQTT_message(int num)                     // Send MQTT message
   }
   
 }
-
-
-
-
-                                                   
- 
+                                                
  void Connect_MQTT_server()                         //  MQTT server connection  
- { 
-                                     
+ {                              
             Serial.println(" Connecting to MQTT" );
 
             Serial.print(server[0]); Serial.print(".");     // Print MQTT server IP number to Serial monitor
@@ -271,13 +285,10 @@ void send_MQTT_message(int num)                     // Send MQTT message
            lcd.print("  MQTT Error        ");   // error in connection
 
            Serial.println(" MQTT Connection ERROR " );
-     
         }    
     } 
     
  }
-
-
 
                                // Receive incoming MQTT message   
  
@@ -300,6 +311,38 @@ void send_MQTT_message(int num)                     // Send MQTT message
        
    free(receiv_string); 
  } 
+ 
+
+ double GetAnalogWeatherVal() {
+   Serial.printIn("Inside GetAnalogWeatherVal()");
+   
+   attachInterrupt(digitalPinToInterrupt(intpin), pulse_interrupt, RISING);
+   Timer1.attachInterrupt(Timer_int_routine);
+
+   // convert frequency to wind speed (m/s)
+   double wend_sped = (0.6344 * freq) + 0.2493;
+
+   // convert to (km/h)
+   wend_sped = (wend_sped / 1000) * 60;
+
+   return wend_sped;
+ }
+
+void pulse_interrupt(){
+  pulse++;
+}
+
+void Timer_int_routine(){
+  time++;
+
+  if(time>9){
+
+    time = 0;
+    freq = pulse / 5;
+
+    pulse = 0;
+  }
+}
 
  //Software Americans
  //Eric, Oscar, Jaakko
